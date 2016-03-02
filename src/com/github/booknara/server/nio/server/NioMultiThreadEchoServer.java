@@ -37,25 +37,23 @@ public class NioMultiThreadEchoServer implements Runnable {
 
                 Set<SelectionKey> selectedKeys = selector.selectedKeys();
 
-                synchronized (selectedKeys) {
-                    Iterator<SelectionKey> i = selectedKeys.iterator();
-                    while (i.hasNext()) {
-                        SelectionKey key = i.next();
-                        i.remove();
+                Iterator<SelectionKey> i = selectedKeys.iterator();
+                while (i.hasNext()) {
+                    SelectionKey key = i.next();
+                    i.remove();
 
-                        if (key.isAcceptable()) {
-                            handleAccept(key);
-                        }
-
-                        if (key.isConnectable()) {
-                            handleConnect(key);
-                        }
-
-                        if (key.isReadable()) {
-                            readyClients.add(key);
-                        }
-
+                    if (key.isAcceptable()) {
+                        handleAccept(key);
                     }
+
+                    if (key.isConnectable()) {
+                        handleConnect(key);
+                    }
+
+                    if (key.isReadable()) {
+                        readyClients.add(key);
+                    }
+
                 }
 
                 if (!readyClients.isEmpty())
