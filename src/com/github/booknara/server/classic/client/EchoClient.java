@@ -9,7 +9,7 @@ import java.net.Socket;
  * Created by Daehee Han(@daniel_booknara) on 2/25/16.
  */
 public class EchoClient {
-    private static final String HOST_ADDRESS = "192.168.1.244";
+    private static final String HOST_ADDRESS = "localhost";
     private static final int PORT = 9091;
     private static final int BUFFER_SIZE = 1024;
 

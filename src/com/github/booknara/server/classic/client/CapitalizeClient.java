@@ -9,7 +9,7 @@ import java.net.Socket;
  * Created by Daehee Han(@daniel_booknara) on 2/17/16.
  */
 public class CapitalizeClient {
-    private static final String serverAddress = "192.168.1.244";
+    private static final String serverAddress = "localhost";
     private static final int port = 9091;
 
     public static void main(String[] args) throws IOException {

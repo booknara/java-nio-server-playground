@@ -12,7 +12,7 @@ import java.net.SocketException;
  */
 public class NioEchoClient {
     private static final int SERVER_PORT = 9091;
-    private static final String SERVER_ADDRESS = "192.168.1.244";
+    private static final String SERVER_ADDRESS = "localhost";
 
     private Thread listenThread;
     private Thread sendThread;
