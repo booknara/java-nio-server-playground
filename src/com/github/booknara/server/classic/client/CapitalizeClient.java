@@ -1,6 +1,8 @@
 package com.github.booknara.server.classic.client;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.net.Socket;
 
 /**
