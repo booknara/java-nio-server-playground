@@ -33,9 +33,10 @@ public class NioMultiThreadEchoServer implements Runnable {
                 if (numKeys <= 0 )
                     continue;
 
-                Set readyClients = new HashSet();
+                Set<SelectionKey> readyClients = new HashSet<>();
 
-                Set selectedKeys = selector.selectedKeys();
+                Set<SelectionKey> selectedKeys = selector.selectedKeys();
+
                 synchronized (selectedKeys) {
                     Iterator<SelectionKey> i = selectedKeys.iterator();
                     while (i.hasNext()) {
@@ -127,12 +128,12 @@ public class NioMultiThreadEchoServer implements Runnable {
         }
     }
 
-    private void handleRead(Set readyClients) {
+    private void handleRead(Set<SelectionKey> readyClients) {
         ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
 
-        Iterator rc = readyClients.iterator();
+        Iterator<SelectionKey> rc = readyClients.iterator();
         while (rc.hasNext()) {
-            SocketChannel channel = (SocketChannel) ((SelectionKey) rc.next()).channel();
+            SocketChannel channel = (SocketChannel) (rc.next()).channel();
 
             try {
                 channel.read(buffer);
@@ -141,31 +142,28 @@ public class NioMultiThreadEchoServer implements Runnable {
                 e.printStackTrace();
             }
 
-            if (buffer.limit() == 0) {
-                closeConnection(channel);
-            } else {
-                buffer.flip();
+            buffer.flip();
 
-                Iterator c = clients.iterator();
-                while (c.hasNext()) {
-                    SocketChannel outChannel = (SocketChannel) c.next();
+            Iterator<SocketChannel> c = clients.iterator();
+            while (c.hasNext()) {
+                SocketChannel outChannel = c.next();
 
-                    try {
-                        outChannel.write(buffer);
-                    } catch (IOException e) {
-                        closeConnection(channel);
-                        e.printStackTrace();
-                    }
-
-                    buffer.rewind();
+                try {
+                    outChannel.write(buffer);
+                } catch (IOException e) {
+                    closeConnection(channel);
+                    e.printStackTrace();
                 }
 
-                buffer.clear();
+                buffer.rewind();
             }
+
+            buffer.clear();
         }
     }
 
     private void closeConnection(SocketChannel channel) {
+        System.out.println("Close Connection");
         try {
             clients.remove(channel);
             channel.keyFor(selector).cancel();
